@@ -20,11 +20,14 @@ INCLUDEDIR = include
 # Define here flags to compile the tests if needed
 JP = 
 
-CFLAGS = -O2  -g $(JP) -ffreestanding -Wall -I$(INCLUDEDIR) 
-ASMFLAGS = -I$(INCLUDEDIR)
-SYSLDFLAGS = -T system.lds
-USRLDFLAGS = -T user.lds
+CFLAGS = -m32 -O2  -g $(JP) -ffreestanding -Wall -I$(INCLUDEDIR) 
+ASMFLAGS = -m32 -I$(INCLUDEDIR)
+SYSLDFLAGS = -T system.lds -melf_i386
+USRLDFLAGS = -T user.lds -melf_i386
 LINKFLAGS = -g 
+ASFLAGS = -32
+HOSTCFLAGS = -m32
+
 
 SYSOBJ = interrupt.o entry.o io.o sys.o sched.o mm.o devices.o utils.o hardware.o
 
