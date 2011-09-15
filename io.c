@@ -12,6 +12,11 @@
 #define NUM_ROWS    25
 
 Byte x, y=15;
+Byte ox,oy;
+
+
+
+
 
 /* Read a byte from 'port' */
 Byte inb (unsigned short port)
