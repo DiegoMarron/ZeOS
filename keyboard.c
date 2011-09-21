@@ -45,7 +45,7 @@ void kbd_routine(){
   }else{
     //key down
     //kbd_buff[0]=char_map[2];
-    kbd_buff[0]=char_map[kbd_i.kcode];
+    kbd_buff[0]=char_map[(int)kbd_i.kcode];
 
     printk(&kbd_buff[0]);
   }

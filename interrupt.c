@@ -115,16 +115,12 @@ unsigned long long tic=0;
 
 void clock_routine(){
 
-
   char _time_buff[9]={'0','0',':','0','0',':','0','0','\0'};
   
-  int secs;
-
-  //char t=
   // just increment tic, if it reaches the max 2^64
   // when incremented by 1, automatically it will reset to 0
   tic++;
 
   printk_xy(72,0,&_time_buff[0]);
-  printk_xy(72,1, __itoa(secs, &_time_buff[0],10,0));
+
 }

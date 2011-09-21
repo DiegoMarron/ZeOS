@@ -9,8 +9,8 @@ int __attribute__ ((__section__(".text.main")))
     /* runjp(); */
 
     
-  unsigned char c1='h';
-  unsigned char c2='o';
+  char c1='h';
+  char c2='o';
   write(1,&c1,1);
   write(1,&c2,1);
   
