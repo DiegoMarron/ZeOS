@@ -32,7 +32,7 @@ HOSTCFLAGS = -m32
 SYSOBJ = interrupt.o entry.o io.o sys.o sched.o mm.o devices.o utils.o hardware.o exceptions.o keyboard.o klib.o 
 
 #add to USROBJ the object files required to complete the user program
-USROBJ = libc.o # libjp.a
+USROBJ = stdio.o libc.o test/tsuit1.o # libjp.a
 
 all:zeos.bin
 
@@ -77,12 +77,21 @@ system.o:system.c $(INCLUDEDIR)/hardware.h system.lds $(SYSOBJ) $(INCLUDEDIR)/se
 
 
 #################################################################################################################
-
+# SYSTEM
 exceptions.o: exceptions.c $(INCLUDEDIR)/types.h $(INCLUDEDIR)/interrupt.h $(INCLUDEDIR)/io.h $(INCLUDEDIR)/exceptions.h
 
 keyboard.o:keyboard.c  $(INCLUDEDIR)/types.h $(INCLUDEDIR)/io.h $(INCLUDEDIR)/keyboard.h $(INCLUDEDIR)/interrupt.h
 
 klib.o: klib.c $(INCLUDEDIR)/types.h 
+
+#
+#USER
+#
+stdio.o: stdio.c $(INCLUDEDIR)/libc.h
+
+test/tsuit1.o: test/tsuit1.c $(INCLUDEDIR)/stdio.h
+
+
 
 #################################################################################################################
 
