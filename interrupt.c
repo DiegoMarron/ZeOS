@@ -5,6 +5,11 @@
 #include <interrupt.h>
 #include <segment.h>
 #include <hardware.h>
+#include <exceptions.h>
+
+#include <klib.h>
+#include <io.h>
+#include <keyboard.h>
 
 Gate idt[IDT_ENTRIES];
 Register    idtR;
@@ -69,43 +74,57 @@ void setTrapHandler(int vector, void (*handler)(), int maxAccessibleFromPL)
   idt[vector].flags           = flags;
   idt[vector].highOffset      = highWord((DWord)handler);
 }
+
+
+void clock_handler();
+void syscall_handler();
+void kbd_handler();
+
 void setIdt()
 {
   /* Program interrups/exception service routines */
   idtR.base  = (DWord)idt;
   idtR.limit = IDT_ENTRIES * sizeof(Gate) - 1;
+
+  // in exceptions.c
+  init_except();
+
+  // Ints
+  setInterruptHandler (32, clock_handler, 0);  // int 0x20
+  setInterruptHandler (33, kbd_handler, 0);  // int 0x21
+
+  init_kbd();
+
+  //syscals
+  setInterruptHandler (128, syscall_handler, 3);  // int 0x80
+  
+
   /* ADD INITIALIZATION CODE FOR INTERRUPT VECTOR */
   set_idt_reg(&idtR);
 
-  /*
-  setInterruptHandler (0, NAME_HANDLER_EXCEPTION(division), 0);
-  setInterruptHandler (1, NAME_HANDLER_EXCEPTION(debug), 3);
-  setInterruptHandler (2, NAME_HANDLER_EXCEPTION(nmi) , 0);
-  setInterruptHandler (3, NAME_HANDLER_EXCEPTION(breakpoint), 3);
-  setInterruptHandler (4, NAME_HANDLER_EXCEPTION(overflow), 0);
-  setInterruptHandler (5, NAME_HANDLER_EXCEPTION(bound), 0);
-  setInterruptHandler (6, NAME_HANDLER_EXCEPTION(opcode), 0);
-  setInterruptHandler (7, NAME_HANDLER_EXCEPTION(fpu), 0);
-  setInterruptHandler (8, NAME_HANDLER_EXCEPTION(double_fault), 0);
-  setInterruptHandler (9, NAME_HANDLER_EXCEPTION(copr_overrun) , 0);
-  setInterruptHandler (10, NAME_HANDLER_EXCEPTION(invalid_tss), 0);
-  setInterruptHandler (11, NAME_HANDLER_EXCEPTION(segement_not_present), 0);
-  setInterruptHandler (12, NAME_HANDLER_EXCEPTION(stack_fault), 0);
-  setInterruptHandler (13, NAME_HANDLER_EXCEPTION(gen_protection), 0);
-  setInterruptHandler (14, NAME_HANDLER_EXCEPTION(page_fault), 0);
-  setInterruptHandler (16, NAME_HANDLER_EXCEPTION(math), 0);
-  setInterruptHandler (17, NAME_HANDLER_EXCEPTION(align_check), 0); 
-  setInterruptHandler (18, NAME_HANDLER_EXCEPTION(machine), 0);
-  setInterruptHandler (19, NAME_HANDLER_EXCEPTION(simd), 0);
-  */
-
-  // Ints
-  //setInterruptHandler (32, clock_handler, 0);  // int 0x20
-  //setInterruptHandler (33, kbd_handler, 0);  // int 0x21
-
-  //syscals
-  //setInterruptHandler (128, syscall_handler, 0);  // int 0x80
-
-
 }
 
+
+/*
+  HH:MM:SS <- 8 characters
+
+ */
+
+// 64 bits
+unsigned long long tic=0;
+
+void clock_routine(){
+
+
+  char _time_buff[9]={'0','0',':','0','0',':','0','0','\0'};
+  
+  int secs;
+
+  //char t=
+  // just increment tic, if it reaches the max 2^64
+  // when incremented by 1, automatically it will reset to 0
+  tic++;
+
+  printk_xy(72,0,&_time_buff[0]);
+  printk_xy(72,1, __itoa(secs, &_time_buff[0],10,0));
+}

@@ -12,7 +12,6 @@
 #include <io.h>
 #include <utils.h>
 
-
 int (*usr_main)(void) = (void *) PH_USER_START;
 unsigned int *p_sys_size = (unsigned int *) KERNEL_START;
 unsigned int *p_usr_size = (unsigned int *) KERNEL_START+1;
@@ -60,6 +59,7 @@ inline void set_seg_regs(Word data_sel, Word stack_sel, DWord esp)
 int __attribute__((__section__(".text.main"))) 
   main(void) 
 {
+  int i;
 
   set_eflags();
 
@@ -74,12 +74,17 @@ int __attribute__((__section__(".text.main")))
   setIdt(); /* Definicio del vector de interrupcions */
   setTSS(); /* Definicio de la TSS */
 
+  printk_xy(10,10,"hola!");
+  
+
   /* Initialize Memory */
   init_mm();
 
   /* Initialize task 0 data */
   init_task0();
 
+  enable_int();
+  
   /* Move user code/data now (after the page table initialization) */
   copy_data((void *) KERNEL_START + *p_sys_size, usr_main, *p_usr_size);
 

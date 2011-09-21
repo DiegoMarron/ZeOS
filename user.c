@@ -7,5 +7,15 @@ int __attribute__ ((__section__(".text.main")))
     /* __asm__ __volatile__ ("mov %0, %%cr3"::"r" (0) ); */
     /* Uncomment next line to call the initial routine for the test cases */
     /* runjp(); */
+
+    
+  unsigned char c1='h';
+  unsigned char c2='o';
+  write(1,&c1,1);
+  write(1,&c2,1);
+  
+
   while(1);
+
+
 }

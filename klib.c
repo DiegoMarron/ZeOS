@@ -9,9 +9,9 @@ char i_map[] = {'0','1','2','3','4','5','6','7','8','9',
 		'K','L','M','N','O','P','Q','R','S','T',
 		'U','V','W','X','Y','Z'};
 
-char * __itoa (int __val, char *__s, int __radix,int upper_case){
+char * __itoa(int __val, char *__s, int __radix,int upper_case){
 
-  int sign,i;
+  int sign;
   char *stmp = __s;
   char x,*os=__s;
 

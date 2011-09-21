@@ -40,45 +40,73 @@ char *excep_errors[]={"Division by Zero", // 0
 //
 // * NOTE: do_excep is an inline funcion! so no jump from routine to do_exep
 //         is done
-#define CREATE_EXCEPTION(name,num)  void sys_excep_##name(){ do_excep(num); }
-
+#define CREATE_EXCEPTION(name,num)                             \
+                      void sys_excep_handler_##name();  \
+                      void sys_excep_##name(){ do_excep(num); }
 
 // Macro to get the hanlder name
-#define NAME_HANDLER_EXCEPTION(name) void sys_excep_handler_##name()
+#define NAME_HANDLER_EXCEPTION(name) sys_excep_handler_##name
+
+
+//#define DECLARE_HANDLER_EXCEPTION(name) extern void sys_excep_handler_##name()
 
 
 // we inline do_excep for speed reasons.
 // each handler will call this function to print an error message and them
 // halt the OS
-inline void do_excep(DWord n){
-  printk("Ooops! Guru Meditation\n"); printk("Exceptcion occured: "); printk(&excep_errors[n]);
+__inline__ void do_excep(DWord n){
+  printk("Ooops! Guru Meditation\n"); printk("Exceptcion occured: "); printk(excep_errors[n]);
   while(1){};
 }
 
 
 // Create / Declare all exception routines
-CREATE_EXCEPTION(division,0);
-CREATE_EXCEPTION(debug,1);
-CREATE_EXCEPTION(nmi,2);
-CREATE_EXCEPTION(breakpoint,3);
-CREATE_EXCEPTION(overflow,4);
-CREATE_EXCEPTION(bound,5);
-CREATE_EXCEPTION(opcode,6);
-CREATE_EXCEPTION(fpu,7);
-CREATE_EXCEPTION(double_fault,8);
-CREATE_EXCEPTION(copr_overrun,9);
-CREATE_EXCEPTION(invalid_tss,10);
-CREATE_EXCEPTION(segement_not_present,11);
-CREATE_EXCEPTION(stack_fault,12);
-CREATE_EXCEPTION(gen_protection,13);
-CREATE_EXCEPTION(page_fault,14);
-CREATE_EXCEPTION(excep15,15);
-CREATE_EXCEPTION(math,16);
-CREATE_EXCEPTION(align_check,17);
-CREATE_EXCEPTION(machine,18);
-CREATE_EXCEPTION(simd,19);
+CREATE_EXCEPTION(division,0)
+CREATE_EXCEPTION(debug,1)
+CREATE_EXCEPTION(nmi,2)
+CREATE_EXCEPTION(breakpoint,3)
+CREATE_EXCEPTION(overflow,4)
+CREATE_EXCEPTION(bound,5)
+CREATE_EXCEPTION(opcode,6)
+CREATE_EXCEPTION(fpu,7)
+CREATE_EXCEPTION(double_fault,8)
+CREATE_EXCEPTION(copr_overrun,9)
+CREATE_EXCEPTION(invalid_tss,10)
+CREATE_EXCEPTION(segement_not_present,11)
+CREATE_EXCEPTION(stack_fault,12)
+CREATE_EXCEPTION(gen_protection,13)
+CREATE_EXCEPTION(page_fault,14)
+CREATE_EXCEPTION(excep15,15)
+CREATE_EXCEPTION(math,16)
+CREATE_EXCEPTION(align_check,17)
+CREATE_EXCEPTION(machine,18)
+CREATE_EXCEPTION(simd,19)
 
 
+
+void init_except(){
+  
+  setInterruptHandler (0, NAME_HANDLER_EXCEPTION(division), 0);
+  setInterruptHandler (1, NAME_HANDLER_EXCEPTION(debug), 3);
+  setInterruptHandler (2, NAME_HANDLER_EXCEPTION(nmi) , 0);
+  setInterruptHandler (3, NAME_HANDLER_EXCEPTION(breakpoint), 3);
+  setInterruptHandler (4, NAME_HANDLER_EXCEPTION(overflow), 0);
+  setInterruptHandler (5, NAME_HANDLER_EXCEPTION(bound), 0);
+  setInterruptHandler (6, NAME_HANDLER_EXCEPTION(opcode), 0);
+  setInterruptHandler (7, NAME_HANDLER_EXCEPTION(fpu), 0);
+  setInterruptHandler (8, NAME_HANDLER_EXCEPTION(double_fault), 0);
+  setInterruptHandler (9, NAME_HANDLER_EXCEPTION(copr_overrun) , 0);
+  setInterruptHandler (10, NAME_HANDLER_EXCEPTION(invalid_tss), 0);
+  setInterruptHandler (11, NAME_HANDLER_EXCEPTION(segement_not_present), 0);
+  setInterruptHandler (12, NAME_HANDLER_EXCEPTION(stack_fault), 0);
+  setInterruptHandler (13, NAME_HANDLER_EXCEPTION(gen_protection), 0);
+  setInterruptHandler (14, NAME_HANDLER_EXCEPTION(page_fault), 0);
+  setInterruptHandler (16, NAME_HANDLER_EXCEPTION(math), 0);
+  setInterruptHandler (17, NAME_HANDLER_EXCEPTION(align_check), 0); 
+  setInterruptHandler (18, NAME_HANDLER_EXCEPTION(machine), 0);
+  setInterruptHandler (19, NAME_HANDLER_EXCEPTION(simd), 0);
+  
+}
 
 
 

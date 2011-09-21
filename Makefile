@@ -29,7 +29,7 @@ ASFLAGS = -32
 HOSTCFLAGS = -m32
 
 
-SYSOBJ = interrupt.o entry.o io.o sys.o sched.o mm.o devices.o utils.o hardware.o
+SYSOBJ = interrupt.o entry.o io.o sys.o sched.o mm.o devices.o utils.o hardware.o exceptions.o keyboard.o klib.o 
 
 #add to USROBJ the object files required to complete the user program
 USROBJ = libc.o # libjp.a
@@ -74,6 +74,18 @@ utils.o:utils.c $(INCLUDEDIR)/utils.h
 
 
 system.o:system.c $(INCLUDEDIR)/hardware.h system.lds $(SYSOBJ) $(INCLUDEDIR)/segment.h $(INCLUDEDIR)/types.h $(INCLUDEDIR)/interrupt.h $(INCLUDEDIR)/system.h $(INCLUDEDIR)/sched.h $(INCLUDEDIR)/mm.h $(INCLUDEDIR)/io.h $(INCLUDEDIR)/mm_address.h 
+
+
+#################################################################################################################
+
+exceptions.o: exceptions.c $(INCLUDEDIR)/types.h $(INCLUDEDIR)/interrupt.h $(INCLUDEDIR)/io.h $(INCLUDEDIR)/exceptions.h
+
+keyboard.o:keyboard.c  $(INCLUDEDIR)/types.h $(INCLUDEDIR)/io.h $(INCLUDEDIR)/keyboard.h $(INCLUDEDIR)/interrupt.h
+
+klib.o: klib.c $(INCLUDEDIR)/types.h 
+
+#################################################################################################################
+
 
 
 system: system.o system.lds $(SYSOBJ)

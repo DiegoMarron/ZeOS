@@ -5,8 +5,8 @@
 #include <interrupt.h>
 
 
+extern void kbd_handler();
 
-//#define kdb __kbd_i;
 
 struct kbd_info kbd_i;
 char kbd_buff[KBD_MAXBUFF];
@@ -53,8 +53,6 @@ void kbd_routine(){
 
 }
 
-
-extern void kbd_handler();
 
 
 void init_kbd(){

@@ -6,6 +6,8 @@
 #include <segment.h>
 
 
+ENOSYS = 38
+
 /**************************************************/
 /**** Save & Restore ******************************/
 /**                                              **/
@@ -79,7 +81,7 @@
 
 */
 
-/*
+
 ENTRY(sys_excep_handler_division)
         SAVE_ALL
         call sys_excep_division
@@ -210,27 +212,7 @@ ENTRY(sys_excep_handler_simd)
         call sys_excep_simd
         RESTORE_ALL
         iret
-
-*/	
-
 	
-/*	
-TODEL
-	
-ENTRY(divide_error_handler)
-	        SAVE_ALL
-	        call divide_error_routine
-	        RESTORE_ALL
-	        iret
-
-TODEL
-ENTRY(double_fault_handler)
-	        SAVE_ALL
-	        call double_fault_routine
-	        RESTORE_ALL
-	        addl $4,%esp
-	        iret
-
 
 /*
   H/W Interrupts
@@ -238,30 +220,65 @@ ENTRY(double_fault_handler)
   The main difference compared with excep handling is the need to
   indicate an EOI (End Of Int)
 */
-
-
 	
-/*	
+	
 ENTRY(clock_handler)
-	        SAVE_ALL
-	        call clock_routine
-	        EOI
-	        RESTORE_ALL
-	        iret
+        SAVE_ALL
+        call clock_routine
+        EOI
+        RESTORE_ALL
+        iret
 
-ENTRY(keyboard_handler)
-	        SAVE_ALL
-	        call keyboard_routine
-	        EOI
-	        RESTORE_ALL
-	        iret
-*/
+ENTRY(kbd_handler)
+        SAVE_ALL
+        call kbd_routine
+        EOI
+        RESTORE_ALL
+        iret
+		
 
 
 
 /*
  SYSTEM CALL INTERRUPT
  we are setting int 80, same as linux for system calls
-
 */
 
+
+#define nr_syscalls ((syscall_table_size)/4)
+
+
+ENTRY(syscall_handler)
+        SAVE_ALL
+        cmpl $(nr_syscalls),%eax
+        jg   err_no_syscall
+        call *sys_call_table(,%eax,0x04)
+        movl %eax,24(%esp)
+        RESTORE_ALL
+        iret
+
+err_no_syscall:
+	movl $-ENOSYS,24(%esp)
+	RESTORE_ALL
+	iret
+
+ENTRY(sys_ni_syscall)
+       jmp err_no_syscall
+
+		
+ENTRY(sys_call_table)
+	.long sys_ni_syscall
+	.long sys_ni_syscall
+        .long sys_ni_syscall
+        .long sys_ni_syscall
+	.long sys_write
+
+syscall_table_size=(.-sys_call_table)
+
+
+
+	
+	
+
+	
+	
