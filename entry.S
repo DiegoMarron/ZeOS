@@ -36,7 +36,7 @@ ENOSYS = 38
 /**  3C(%esp) - %oldss  /                        **/
 /**                                              **/
 /**************************************************/
-
+/*
 #define SAVE_ALL \
       pushl %gs; \
       pushl %fs; \
@@ -65,7 +65,39 @@ ENOSYS = 38
         popl %es                ;\
         popl %fs                ;\
         popl %gs
+*/
 
+#define SAVE_ALL\
+      pushl %gs                 ;\
+      pushl %fs                 ;\
+      pushl %es                 ;\
+      pushl %ds                 ;\
+      pushl %eax                ;\
+      pushl %ebp                ;\
+      pushl %edi                ;\
+      pushl %esi                ;\
+      pushl %edx                ;\
+      pushl %ecx                ;\
+      pushl %ebx                ;\
+      movl $__KERNEL_DS, %edx   ;\
+      movl %edx, %ds         ;\
+      movl %edx, %es
+
+#define RESTORE_ALL\
+        popl %ebx               ;\
+        popl %ecx               ;\
+        popl %edx               ;\
+        popl %esi               ;\
+        popl %edi               ;\
+        popl %ebp               ;\
+        popl %eax               ;\
+        popl %ds                ;\
+        popl %es                ;\
+        popl %fs                ;\
+        popl %gs
+
+
+	
 #define EOI\
         movb $0x20,%al          ;\
         outb %al, $0x20
@@ -199,6 +231,7 @@ ENTRY(sys_excep_handler_align_check)
         SAVE_ALL
         call sys_excep_align_check
         RESTORE_ALL
+	add $4, %esp      
         iret
 
 ENTRY(sys_excep_handler_machine)
@@ -216,7 +249,7 @@ ENTRY(sys_excep_handler_simd)
 
 /*
   H/W Interrupts
-  IDT entries from 32-255 are reserved for h/w and soft interrupts
+ IDT entries from 32-255 are reserved for h/w and soft interrupts
   The main difference compared with excep handling is the need to
   indicate an EOI (End Of Int)
 */
@@ -244,26 +277,22 @@ ENTRY(kbd_handler)
  we are setting int 80, same as linux for system calls
 */
 
-
 #define nr_syscalls ((syscall_table_size)/4)
 
 
 ENTRY(syscall_handler)
         SAVE_ALL
-        cmpl $(nr_syscalls),%eax
-        jg   err_no_syscall
+	cmpl $(nr_syscalls),%eax
+        jae err_no_syscall
         call *sys_call_table(,%eax,0x04)
         movl %eax,24(%esp)
         RESTORE_ALL
         iret
-
+	
 err_no_syscall:
 	movl $-ENOSYS,24(%esp)
 	RESTORE_ALL
 	iret
-
-ENTRY(sys_ni_syscall)
-       jmp err_no_syscall
 
 		
 ENTRY(sys_call_table)

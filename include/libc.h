@@ -9,6 +9,6 @@
 #include <stats.h>
 
 int write(int fd,char *buffer,int size);
-
+int write2(int fd,char *buffer,int size);
 
 #endif  /* __LIBC_H__ */

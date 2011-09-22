@@ -1,7 +1,17 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+
+#define AC_READ 0
+#define AC_WRITE 1
+
+
+
 void copy_data(void *start, void *dest, int size);
 int copy_from_user(void *start, void *dest, int size);
 int copy_to_user(void *start, void *dest, int size);
+
+int access_ok(int type, const void * addr, unsigned long size);
+
+
 #endif

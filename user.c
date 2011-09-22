@@ -1,6 +1,6 @@
-//#include <libc.h>
+#include <libc.h>
 #include <stdio.h>
-#include <testsuit.h>
+//#include <testsuit.h>
 
 int __attribute__ ((__section__(".text.main")))
   main(void)
@@ -19,8 +19,38 @@ int __attribute__ ((__section__(".text.main")))
 
   //printf("Hello from User mode prinft\n\0");
 
-  test_suit1();
+  //test_suit1();
   
+  //runjp();
+
+  
+  int res;  
+  /*
+  char c1='o';
+  
+  res=write2(3,&c1,1);
+
+  if (res > 0) printf("mayor que zero");
+  if (res = 0) printf("igual que zero");
+  if (res < 0) printf("menor que zero");
+
+
+  if (res == 5) printf("igual a 5");
+  if (res == -1) printf("igual a -1");
+  */
+  /*
+  res=write(1,0x1000,1);
+
+  if (res == -14) printf("igual a -14");
+  if (res == 14) printf("igual a 14");
+
+
+  if (res > 0) printf("mayor que zero");
+  if (res = 0) printf("igual que zero");
+  if (res < 0) printf("menor que zero");
+  
+  */
+  runjp();
 
   while(1);
 
