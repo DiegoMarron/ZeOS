@@ -10,7 +10,6 @@
 
 
 
-//void perror(const char* s);
 
 
 

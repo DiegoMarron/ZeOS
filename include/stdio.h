@@ -8,8 +8,6 @@
 #define STDERR_FILENO  2
 
 
-
-//int printf(const char *string);
 int printf(char *string);
 
 

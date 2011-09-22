@@ -10,16 +10,9 @@ extern int errno;
 
 // do syscall return: puts the error code on errno
 // and return -1 if an error ocurred
-/*
-#define _syscall_return(res)                            \
-  if ((unsigned long)(res) >= (unsigned long)(-125)){    \
-    errno = -(res);res =-1;                             \
-  }                                                     \
-  return res
-*/
 
 #define _syscall_return(res)                            \
-  if (res < 0){    \
+  if ((unsigned long)(res) >= (unsigned long)(-125)){    \
     errno = -(res);res =-1;                             \
   }                                                     \
   return res
@@ -33,15 +26,6 @@ extern int errno;
 		  : "0" (num),"b" ((long)(arg1)),	     \
                     "c" ((long)(arg2)), "d" ((long)(arg3))); \
   _syscall_return(__res)
-
-/*
-#define do_syscall_32(num,arg1,arg2,arg3)                     \
-  long __res;				                     \
-  __asm__ volatile ("int $0x80"                              \
-		  : "=a" (__res)                             \
-		  : "0" (num),"b" ((long)(arg1)),	     \
-                    "c" ((long)(arg2)), "d" ((long)(arg3))); \
-*/
 
 
 #endif

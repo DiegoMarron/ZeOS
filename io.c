@@ -37,22 +37,6 @@ void outb(Byte __val, unsigned short __port){
 }
 
 
-/*
-void printc(char c)
-{
-  Word ch = (Word) (c & 0x00FF) | 0x0200;
-  DWord screen = 0xb8000 + (y * NUM_COLUMNS + x) * 2;
-   __asm__ __volatile__ ( "movb %0, %%al; outb $0xe9" ::"a"(c));
-  if (++x >= NUM_COLUMNS)
-  {
-    x = 0;
-    if (++y >= NUM_ROWS)
-      y = 0;
-  }
-  asm("movw %0, (%1)" : : "r"(ch), "r"(screen));
-}
-*/
-
 
 void printc(char c)
 {
@@ -62,7 +46,8 @@ void printc(char c)
   switch(c){
 
   case '\n':
-    x=0; y++;
+    x=0;
+    if ( ++y >= NUM_ROWS) y=0;
     break;
   default:
       screen = 0xb8000 + (y * NUM_COLUMNS + x) * 2;
@@ -79,7 +64,6 @@ void printc(char c)
 }
 
 
-
 void printk(char *string)
 {
   int i;
@@ -92,13 +76,7 @@ void printk(char *string)
 // positioning anywhere
 void printk_xy(int _x, int _y, char *string){
   int i;
-  //Byte _tx=(Byte)x;
-  //Byte _ty=(Byte)y;
 
-  // we do this check here becouse printc 
-  //if (_tx >= NUM_COLUMNS)  _tx=0;
-  //if (_ty >= NUM_ROWS)  _ty=0;
-  // save_and_set_xy( (Byte) _tx, (Byte) _ty);
   save_and_set_xy( (Byte) _x, (Byte) _y);
 
   for (i = 0; string[i]; i++)

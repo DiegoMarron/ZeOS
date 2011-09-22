@@ -44,7 +44,6 @@ void kbd_routine(){
     // for the moment we are not interested on key release
   }else{
     //key down
-    //kbd_buff[0]=char_map[2];
     kbd_buff[0]=char_map[(int)kbd_i.kcode];
 
     printk(&kbd_buff[0]);

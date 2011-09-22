@@ -72,9 +72,6 @@ int __attribute__((__section__(".text.main")))
   setIdt(); /* Definicio del vector de interrupcions */
   setTSS(); /* Definicio de la TSS */
 
-  printk_xy(10,10,"hola!");
-  
-
   /* Initialize Memory */
   init_mm();
 

@@ -29,17 +29,10 @@ int sys_write(int fd,char *buffer, int size)
 
   if (!check_valid_fd(fd)) return -EBADF;
 
-  if ( !buffer || (size <0) ) return -EINVAL;
+  if (size <0) return -EINVAL;
   if (size==0) return 0;
 
-  // only for debug porpouses..avoid print on screen
-  // the long string used on tests.
-  if (size > 1000) return size;
-
-  if (access_ok(0,buffer,size)){
-    printk("sys_write: access_ok == FALSE");
-    return -14;
-  }
+  if (!access_ok(0,buffer,size)) return -EFAULT;
 
   //assume only console.. :)
   ret=sys_write_console(buffer,size);

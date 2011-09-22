@@ -63,29 +63,12 @@ int copy_to_user(void *start, void *dest, int size)
  */
 int access_ok(int type, const void * addr, unsigned long size)
 {
-  /*  unsigned long addr_top = (unsigned long)addr + size;  
+  unsigned long addr_top = (unsigned long)addr + size;  
 
   if ( ((unsigned long)addr < L_USER_START) || ( addr_top > USER_ESP) )
     return 0;
 
-
   return 1;
-  */
-
-  unsigned int min_usr_address, max_usr_address, bytes_to_copy, max_bytes;
-
-  max_bytes = (NUM_PAG_CODE + NUM_PAG_DATA) * PAGE_SIZE;
-  min_usr_address = L_USER_START;
-  max_usr_address = L_USER_START + max_bytes;
-  bytes_to_copy = (unsigned int) size;
-
-  if ((unsigned int) addr < min_usr_address
-      || (unsigned int) addr > max_usr_address || bytes_to_copy > max_bytes)
-    return -14;
-
-  return 0;
-
-
 }
 
 
