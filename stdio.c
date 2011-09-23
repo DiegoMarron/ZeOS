@@ -7,7 +7,6 @@
 
 int printf(char *string){
 
-  
   int size=0;
   int ret;
   

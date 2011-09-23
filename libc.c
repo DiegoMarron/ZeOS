@@ -13,9 +13,6 @@ int errno;
 
 int write(int fd,char *buffer,int size)
 {
-
-  //OB	return 0;
   do_syscall_3(__NR_write,fd,buffer,size);
-
 }
 

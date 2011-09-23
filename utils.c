@@ -63,6 +63,7 @@ int copy_to_user(void *start, void *dest, int size)
  */
 int access_ok(int type, const void * addr, unsigned long size)
 {
+
   unsigned long addr_top = (unsigned long)addr + size;  
 
   if ( ((unsigned long)addr < L_USER_START) || ( addr_top > USER_ESP) )

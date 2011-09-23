@@ -34,6 +34,12 @@ int sys_write(int fd,char *buffer, int size)
 
   if (!access_ok(0,buffer,size)) return -EFAULT;
 
+  // uncomment this line to cheat while running runjp for del 1 
+  // it will avoid print the very long chain, while emulating
+  // it has successfully done it. The porpouse is to see
+  // the other tests error/results.
+  //if (size > 1000) return size;
+
   //assume only console.. :)
   ret=sys_write_console(buffer,size);
 

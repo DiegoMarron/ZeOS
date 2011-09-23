@@ -11,6 +11,10 @@ int __attribute__ ((__section__(".text.main")))
     /* runjp(); */
 
 
+  printf("\n Zeos Neo Version D1.1\n");	
+  printf("Hello from Printf at user mode :)\n");
+
+
   runjp();
 
   while(1);
