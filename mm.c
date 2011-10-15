@@ -233,7 +233,13 @@ int alloc_frame( void )
 /* free_frame - Mark as FREE_FRAME the frame  'frame'.*/
 void free_frame( unsigned int frame )
 {
-    /* You must insert code here */
+  // You must insert code here
+
+
 }
 
 
+// set page table entry to 0
+inline void del_ss_pag(unsigned _logic){
+  pagusr_table[_logic].entry=0;
+}

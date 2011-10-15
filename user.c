@@ -15,7 +15,7 @@ int __attribute__ ((__section__(".text.main")))
   printf("Hello from Printf at user mode :)\n");
 
 
-  runjp();
+  //runjp();
 
   while(1);
 
