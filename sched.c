@@ -15,27 +15,12 @@ rq_t rq;
 int pid=1;
 
 
-// defined as an inline function so we can
-// benefit from compiler type check and avoid problems. 
-static inline rq_t* this_rq(void){
-  return &rq;
-}
-
 /*
 static inline task_t* ts_task(int i){
   return *task[i].t.task;
 }
 */
 
-inline void rq_add_to_active(struct task_struct *_task, rq_t *_rq){
-  list_del(&_task->t_queue); 
-  list_add_tail(&_task->t_queue, &_rq->actives);
-}
-
-inline void rq_add_to_expired(struct task_struct *_task, rq_t *_rq){
-  list_del(&_task->t_queue); 
-  list_add_tail(&_task->t_queue, &_rq->expired);
-}
 
 
 void init_task0(void)
@@ -48,6 +33,8 @@ void init_task0(void)
   rq->idle = &ts_idle;
   ts_idle.t_rq = rq;
   ts_idle.t_pid = 0;
+  ts_idle.t_cpu_time = 0;
+  ts_idle.t_tics = 0;
 
   // Mark code used ph_pages 
   for (i = NUM_PAG_CODE; i < (NUM_PAG_CODE+NUM_PAG_KERNEL); i++){
@@ -73,22 +60,21 @@ void init_tasks(void){
     task[i].t.task.t_pid = -1;
     task[i].t.task.t_prio = DEFAULT_PRIO;
     task[i].t.task.t_tics = 0;
+    task[i].t.task.t_cpu_time = 0;
+    task[i].t.task.t_tics = 0;
  
-    //INIT_LIST_HEAD(&task[i].t_queue);
-    
+    rq_add_to_free(&task[i].t.task,this_rq());
   }
 
 }
 
 
-
-
 void init_sched(void){
 
-  int i;
+  //int i;
 
   INIT_LIST_HEAD(&rq.actives);
-  INIT_LIST_HEAD(&rq.expired);
+  INIT_LIST_HEAD(&rq.free);
 
   rq.nr_running=0;
   rq.idle = rq.running = 0;
@@ -96,6 +82,21 @@ void init_sched(void){
   init_tasks();
 
   init_task0();
-  
 
 }
+
+/*
+inline task_t *list_head_to_task_struct(struct list_head *lh){
+  return (task_t*)lh; 
+}
+*/
+
+// TODO
+task_t* task_get_free_slot(){
+  return list_head_to_task_struct(list_first( &(this_rq()->free) ));
+}
+
+void task_free_slot(task_t *ts){
+  list_add_tail(&(ts->t_queue), &(this_rq()->free) );
+}
+

@@ -10,6 +10,7 @@
 
 Byte phys_mem[TOTAL_PAGES];
 
+
 /* SEGMENTATION */
 /* Memory segements description table */
 Descriptor  *gdt = (Descriptor *) GDT_START;
@@ -233,13 +234,29 @@ int alloc_frame( void )
 /* free_frame - Mark as FREE_FRAME the frame  'frame'.*/
 void free_frame( unsigned int frame )
 {
-  // You must insert code here
-
-
+  if ((frame > NUM_PAG_KERNEL) && (frame < TOTAL_PAGES))
+				phys_mem[frame] = FREE_FRAME;
 }
 
 
 // set page table entry to 0
-inline void del_ss_pag(unsigned _logic){
+void del_ss_pag(unsigned _logic){
   pagusr_table[_logic].entry=0;
 }
+
+
+int mm_alloc_frames(struct task_struct* _ts){
+  int i,j,frame;
+  
+  for (i = 0; i < NUM_PAG_DATA; i++){
+    frame = alloc_frame();
+    if (frame != -1) _ts->ph_frames[i] = frame;
+    else {
+      for(j = 0;j < i; j++)free_frame(_ts->ph_frames[j]);
+      return 0;
+    }
+  }
+  return 1;
+}
+
+

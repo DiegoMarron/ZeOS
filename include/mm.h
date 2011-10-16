@@ -27,11 +27,14 @@ extern TSS         tss;
 
 void init_mm();
 void set_ss_pag(unsigned page,unsigned frame);
+void del_ss_pag(unsigned _logic);
+
 void set_cr3();
 
 void setGdt();
 
 void setTSS();
 
+int mm_alloc_frames(struct task_struct* _ts);
 
 #endif  /* __MM_H__ */

@@ -10,12 +10,21 @@ int __attribute__ ((__section__(".text.main")))
     /* Uncomment next line to call the initial routine for the test cases */
     /* runjp(); */
 
+  int pid;
 
   printf("\n Zeos Neo Version D1.1\n");	
   printf("Hello from Printf at user mode :)\n");
 
 
+  pid=fork();
+  if (pid==0) printf("pid =0\n");
+  else printf("pid NOOO 0\n");
+
+
   //runjp();
+
+
+
 
   while(1);
 

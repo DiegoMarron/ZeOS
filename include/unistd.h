@@ -5,7 +5,17 @@
 
 extern int errno;
 
-#define __NR_write  4
+#define __NR_exit         1
+#define __NR_fork         2
+#define __NR_write        4
+#define __NR_getpid       20
+#define __NR_sem_init     21
+#define __NR_sem_wait     22
+#define __NR_sem_signal   23
+#define __NR_sem_destroy  24
+#define __NR_nice         34
+#define __NR_get_stats    35
+
 
 
 // do syscall return: puts the error code on errno
@@ -26,6 +36,30 @@ extern int errno;
 		  : "0" (num),"b" ((long)(arg1)),	     \
                     "c" ((long)(arg2)), "d" ((long)(arg3))); \
   _syscall_return(__res)
+
+
+#define do_syscall_0(num)				     \
+  long __res;				                     \
+  __asm__ volatile ("int $0x80"                              \
+		  : "=a" (__res)                             \
+		  : "0" (num));  			     \
+  _syscall_return(__res)
+
+
+
+#define do_syscall_1(num,arg1)				     \
+  long __res;				                     \
+  __asm__ volatile ("int $0x80"                              \
+		  : "=a" (__res)                             \
+		  : "0" (num),"b" ((long)(arg1)));	     \
+  _syscall_return(__res)
+
+
+
+
+
+
+
 
 
 #endif
