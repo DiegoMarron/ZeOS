@@ -35,6 +35,15 @@ void setGdt();
 
 void setTSS();
 
+void free_frame(unsigned int frame);
+int alloc_frame();
+
 int mm_alloc_frames(struct task_struct* _ts);
+
+
+
+inline unsigned int get_cr2();
+
+
 
 #endif  /* __MM_H__ */

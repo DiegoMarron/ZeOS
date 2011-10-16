@@ -9,6 +9,12 @@
 #include <io.h>
 #include <interrupt.h>
 #include <exceptions.h>
+#include <mm.h>
+#include <klib.h>
+//#include <sys.h>
+
+
+void sys_exit();
 
 
 // Array for all exception error messages
@@ -75,12 +81,34 @@ CREATE_EXCEPTION(invalid_tss,10)
 CREATE_EXCEPTION(segement_not_present,11)
 CREATE_EXCEPTION(stack_fault,12)
 CREATE_EXCEPTION(gen_protection,13)
-CREATE_EXCEPTION(page_fault,14)
+//CREATE_EXCEPTION(page_fault,14)
 CREATE_EXCEPTION(excep15,15)
 CREATE_EXCEPTION(math,16)
 CREATE_EXCEPTION(align_check,17)
 CREATE_EXCEPTION(machine,18)
 CREATE_EXCEPTION(simd,19)
+
+
+void sys_excep_handler_page_fault();
+void sys_excep_page_fault(void){       
+  int pid = current->t_pid;
+  char str[12];
+  __itoa(pid,&str[0],10,0);
+  printk("Ooops! Guru Meditation: Exception 14 occured - Page Fault -\n");
+  printk("pid = ");
+  printk(&str[0]);
+  printk(" | trying to access addr: ");
+  pid=get_cr2();
+  __itoa(pid,&str[0],10,0);
+  printk(&str[0]);
+  printk("\n");
+  printk("\n Excepcion de fallo de pagina\n");
+ 
+  if (current->t_pid !=0 ) sys_exit();
+
+  while(1);
+
+}
 
 
 
@@ -101,6 +129,7 @@ void init_except(){
   setInterruptHandler (12, NAME_HANDLER_EXCEPTION(stack_fault), 0);
   setInterruptHandler (13, NAME_HANDLER_EXCEPTION(gen_protection), 0);
   setInterruptHandler (14, NAME_HANDLER_EXCEPTION(page_fault), 0);
+  //setInterruptHandler (14, excep_page_fault, 0);
   setInterruptHandler (16, NAME_HANDLER_EXCEPTION(math), 0);
   setInterruptHandler (17, NAME_HANDLER_EXCEPTION(align_check), 0); 
   setInterruptHandler (18, NAME_HANDLER_EXCEPTION(machine), 0);

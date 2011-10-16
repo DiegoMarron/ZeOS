@@ -9,6 +9,8 @@
 #include <mm.h>
 #include <io.h>
 
+#include<klib.h>
+
 long sys_ni_syscall(void){
         return -ENOSYS;
 }
@@ -50,16 +52,20 @@ int sys_write(int fd,char *buffer, int size)
 
 ///////////////////////////////////////////////////////
 
-
 int sys_getpid(){
   return current->t_pid;
 }
 
 int sys_nice(int _q) {
+  /*
   int old_q = current->t_prio;
   current->t_prio = _q;
   return old_q;
+  */
+  return -38;
 }
+
+
 
 
 int sys_fork(){
@@ -67,33 +73,35 @@ int sys_fork(){
   task_t *nt;
   union task_union *ntu;
   
-  unsigned int t_frames[NUM_PAG_DATA];
   int i;
   int ret=0;
-  
+  unsigned long p_off;
+
   nt = task_get_free_slot();
   if (!nt) return -ENOMEM;
 
   copy_data(current, nt, KERNEL_STACK_SIZE*sizeof(unsigned long));
 
-  // TODO: check if there's free pagusr space
-  //for(i=0;i<NUM_PAG_DATA
-  
+  // TODO: check if there's free pagusr space <- maybe redundant?
+  // as we have the same number of phys pages as log pages..
 
   ret=mm_alloc_frames(nt);
   if (!ret) { task_free_slot(nt); return -ENOMEM; }
 
-  // copy data
-  for(i=0;i< NUM_PAG_DATA;i++){
-    set_ss_pag(t_frames[i], nt->ph_frames[i]);
-    copy_data((void*)(PAGE_SIZE*(PAG_LOG_INIT_DATA_P0+i)), (void*)(PAGE_SIZE*(t_frames[i])), PAGE_SIZE);
-    del_ss_pag(t_frames[i]);
-  }
+  p_off = PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA;
+  for (i = 0; i < NUM_PAG_DATA; i++)
+    {
+      set_ss_pag (p_off + i, nt->ph_frames[i]);
+      copy_data ((void *) (PAGE2ADDR((PAG_LOG_INIT_DATA_P0+i))),
+		 (void *) (PAGE2ADDR((PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA + i))),
+	      PAGE_SIZE);
+      del_ss_pag (nt->ph_frames[i]);
+    }
 
   nt->t_pid = task_next_pid();
   nt->t_tics = 0;
   nt->t_cpu_time = 0;
-  
+
   // flush tlb
   set_cr3();  
 
@@ -103,12 +111,10 @@ int sys_fork(){
 
   // add new task to run queue
   rq_add_to_active(nt,this_rq());
-     
+
   // return son pid
   return nt->t_pid;
-
 }
-
 
 
 void sys_exit(){

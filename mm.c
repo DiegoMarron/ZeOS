@@ -107,6 +107,16 @@ void set_cr3()
  	asm volatile("movl %0,%%cr3": :"r" (dir_pages));
 }
 
+
+inline unsigned int get_cr2(){
+  unsigned int res;
+  __asm__(					\
+	  "movl %%cr2,%0\n\t"			\
+	  :"=r" (res));
+  return res;
+}
+ 
+
 /* Macros for reading/writing the CR0 register, where is shown the paging status */
 #define read_cr0() ({ \
          unsigned int __dummy; \

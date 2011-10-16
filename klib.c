@@ -19,12 +19,18 @@ char * __itoa(int __val, char *__s, int __radix,int upper_case){
   // TODO2: should set errno variable!! 
   if (__radix > 36 || __radix <= 1)
      return 0;
- 
 
   //check negative number
   if ( (sign=(__radix==10 && __val <0))) 
     __val=-__val;
  
+  if ( __val==0){
+    *stmp++='0';
+    *stmp='\0';
+    return __s;
+
+  }
+
   while( __val > 0 ){
     *stmp = i_map[__val % __radix];
     stmp++;
@@ -32,6 +38,8 @@ char * __itoa(int __val, char *__s, int __radix,int upper_case){
   }
 
   if (sign) *stmp++ ='-';
+  
+  *stmp='\0';
   
   stmp--;
   while (stmp>=os)

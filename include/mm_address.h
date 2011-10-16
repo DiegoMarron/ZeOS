@@ -21,5 +21,9 @@
 #define PH_USER_START       0x100000
 #define USER_ESP	L_USER_START+(NUM_PAG_CODE+NUM_PAG_DATA)*0x1000-16
 
+#define PAGE_SHIFT 12
+#define PAGE2ADDR(addr) ( addr << PAGE_SHIFT)
+
+
 #endif
 
