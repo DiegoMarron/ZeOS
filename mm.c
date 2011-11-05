@@ -80,7 +80,9 @@ void set_user_pages( struct task_struct *task )
 {
  int pag; 
  int first_ph_page = NUM_PAG_KERNEL;
-
+ unsigned int frame;
+ 
+ //char str[12];
   /* CODE */
   for (pag=PAG_LOG_INIT_CODE_P0;pag<PAG_LOG_INIT_DATA_P0;pag++){
   	pagusr_table[pag].entry = 0;
@@ -92,12 +94,20 @@ void set_user_pages( struct task_struct *task )
   }
   
   /* DATA */ 
+  /*
   for (pag=PAG_LOG_INIT_DATA_P0;pag<PAG_LOG_INIT_DATA_P0+NUM_PAG_DATA;pag++){
   	pagusr_table[pag].entry = 0;
   	pagusr_table[pag].bits.pbase_addr = alloc_frame();
   	pagusr_table[pag].bits.user = 1;
   	pagusr_table[pag].bits.rw = 1;
   	pagusr_table[pag].bits.present = 1;
+  }
+  */
+
+  for (pag=PAG_LOG_INIT_DATA_P0;pag<PAG_LOG_INIT_DATA_P0+NUM_PAG_DATA;pag++)  {
+    frame=alloc_frame();
+    set_ss_pag(pag,frame);
+    task->ph_frames[pag-PAG_LOG_INIT_DATA_P0]=frame;
   }
 }
 
@@ -244,7 +254,7 @@ int alloc_frame( void )
 /* free_frame - Mark as FREE_FRAME the frame  'frame'.*/
 void free_frame( unsigned int frame )
 {
-  if ((frame > NUM_PAG_KERNEL) && (frame < TOTAL_PAGES))
+  //  if ((frame > NUM_PAG_KERNEL) && (frame < TOTAL_PAGES))
 				phys_mem[frame] = FREE_FRAME;
 }
 

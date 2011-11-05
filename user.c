@@ -12,21 +12,21 @@ int __attribute__ ((__section__(".text.main")))
 
   int pid;
 
-  printf("\n Zeos Neo Version D1.1\n");	
-  printf("Hello from Printf at user mode :)\n");
+  printf("\n Zeos Sink Version D1.2\n");	
 
-
+  
   pid=fork();
-  if (pid==0) printf("pid =0\n");
-  else printf("pid NOOO 0\n");
+  if (pid==0) printf("pid=0\n");
+  else printf("pid NOOO 0 \n");
+ 
 
+  /*
+  pid=fork();
+  if (pid==0) printf("pid=0\n");
+  else printf("pid NOOO 0 \n");
+  */
 
   //runjp();
 
-
-
-
   while(1);
-
-
 }

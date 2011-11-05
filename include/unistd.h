@@ -54,6 +54,13 @@ extern int errno;
 		  : "0" (num),"b" ((long)(arg1)));	     \
   _syscall_return(__res)
 
+#define do_syscall_2(num,arg1,arg2)			     \
+  long __res;				                     \
+  __asm__ volatile ("int $0x80"                              \
+		  : "=a" (__res)                             \
+		  : "0" (num),"b" ((long)(arg1)),	     \
+                    "c" ((long)(arg2)) );                    \
+  _syscall_return(__res)
 
 
 

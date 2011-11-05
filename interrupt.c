@@ -10,6 +10,7 @@
 #include <klib.h>
 #include <io.h>
 #include <keyboard.h>
+#include <sched.h>
 
 Gate idt[IDT_ENTRIES];
 Register    idtR;
@@ -121,7 +122,6 @@ char time_map[60][2]={ "00", "01", "02", "03", "04", "05", "06", "07", "08", "09
 		    "51", "52", "53", "54", "55", "56", "57", "58", "59"   };
 
 
-
 void clock_routine(){
 
   char _time_buff[9]={'0','0',':','0','0',':','0','0','\0'};
@@ -131,6 +131,7 @@ void clock_routine(){
   // when incremented by 1, automatically it will reset to 0
   tics++;
 
+  
   if ((tics % freq) == 0){
     up_secs++;
     if (up_secs > 59) { up_secs=0;up_mins++; }
@@ -149,7 +150,10 @@ void clock_routine(){
   _time_buff[1]=time_map[up_hours][1];
 
   printk_xy(72,0,&_time_buff[0]);
-
+  
+ 
+  schedule();
+  
 }
 
 

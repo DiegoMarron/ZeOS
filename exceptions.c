@@ -80,7 +80,7 @@ CREATE_EXCEPTION(copr_overrun,9)
 CREATE_EXCEPTION(invalid_tss,10)
 CREATE_EXCEPTION(segement_not_present,11)
 CREATE_EXCEPTION(stack_fault,12)
-CREATE_EXCEPTION(gen_protection,13)
+//CREATE_EXCEPTION(gen_protection,13)
 //CREATE_EXCEPTION(page_fault,14)
 CREATE_EXCEPTION(excep15,15)
 CREATE_EXCEPTION(math,16)
@@ -101,14 +101,42 @@ void sys_excep_page_fault(void){
   pid=get_cr2();
   __itoa(pid,&str[0],10,0);
   printk(&str[0]);
-  printk("\n");
-  printk("\n Excepcion de fallo de pagina\n");
- 
+  printk("  \n");
+  printk("\n Page Fault Exception\n");
+
+  //dump_regs();
+
   if (current->t_pid !=0 ) sys_exit();
+
 
   while(1);
 
 }
+
+
+void sys_excep_handler_gen_protection();
+void sys_excep_gen_protection(void){       
+  int pid = current->t_pid;
+  char str[12];
+  __itoa(pid,&str[0],10,0);
+  printk("Ooops! Guru Meditation: Exception 14 occured - Page Fault -\n");
+  printk("pid = ");
+  printk(&str[0]);
+  printk(" | trying to access addr: ");
+  pid=get_cr2();
+  __itoa(pid,&str[0],10,0);
+  printk(&str[0]);
+  printk("  \n");
+  printk("\n General fault protection\n");
+ 
+  //if (current->t_pid !=0 ) sys_exit();
+
+  dump_regs();
+
+  while(1);
+
+}
+
 
 
 

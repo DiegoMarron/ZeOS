@@ -4,7 +4,7 @@
 
 #include <libc.h>
 #include <unistd.h>
-
+#include <errno.h>
 #include <stdio.h>
 
 int errno;
@@ -36,21 +36,36 @@ int nice(int quantum) {
 }
 
 int sem_init(int n_sem, unsigned int value){
-  return -38;
+  //  return -38;
+  do_syscall_2(__NR_sem_init,n_sem,value);
 }
 
 int sem_wait(int n_sem){
-  return -38;
+  //return -38;
+  do_syscall_1(__NR_sem_wait,n_sem);
 }
 
 int sem_signal(int n_sem){
-  return -38;
+  //return -38;
+  do_syscall_1(__NR_sem_signal,n_sem);
 }
 
 int sem_destroy(int n_sem) {
-  return -38;
+  //return -38;
+  do_syscall_1(__NR_sem_destroy,n_sem);
 }
 
 int get_stats(int pid, struct stats *st){
-  return -38;
+  //return -38;
+  do_syscall_2(__NR_get_stats,pid,st);
+}
+
+
+void perror() {
+
+  if ((errno < 0) || (errno > ERR_MAX)){
+    printf("Error: errno out of range.. BUG ?\n");
+  }
+  printf(_error_msg[errno]);
+
 }

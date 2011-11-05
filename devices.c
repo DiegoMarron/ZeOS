@@ -10,3 +10,4 @@ int sys_write_console(char *buffer,int size)
     printc(buffer[i]);
   return size;
 }
+

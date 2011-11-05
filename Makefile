@@ -32,7 +32,7 @@ HOSTCFLAGS = -m32
 SYSOBJ = interrupt.o entry.o io.o sys.o sched.o mm.o devices.o utils.o hardware.o exceptions.o keyboard.o klib.o 
 
 #add to USROBJ the object files required to complete the user program
-USROBJ = stdio.o libc.o test/libjp1.a
+USROBJ = stdio.o libc.o test/libjp2.a
 
 all:zeos.bin
 
@@ -114,4 +114,4 @@ emul: zeos.bin
 	bochs -q -f .bochsrc
 
 emuldbg: zeos.bin
-	bochs_nogdb -q -f .bochsrc
+	bochs-debugger -q -f .bochsrc

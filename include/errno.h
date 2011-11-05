@@ -6,22 +6,84 @@
 #define EPERM            1      /* Operation not permitted */
 #define ENOENT           2      /* No such file or directory */
 #define ESRCH            3      /* No such process */
+#define EINTR            4      /* Interrupted system call */
+#define EIO              5      /* I/O error */
+#define ENXIO            6      /* No such device or address */
+#define E2BIG            7      /* Argument list too long */
+#define ENOEXEC          8      /* Exec format error */
 #define EBADF            9      /* Bad file number */
+#define ECHILD          10      /* No child processes */
 #define EAGAIN          11      /* Try again */
 #define ENOMEM          12      /* Out of memory */
 #define EACCES          13      /* Permission denied */
 #define EFAULT          14      /* Bad address */
+#define ENOTBLK         15      /* Block device required */
 #define EBUSY           16      /* Device or resource busy */
 #define EEXIST          17      /* File exists */
+#define EXDEV           18      /* Cross-device link */
+#define ENODEV          19      /* No such device */
+#define ENOTDIR         20      /* Not a directory */
+#define EISDIR          21      /* Is a directory */
 #define EINVAL          22      /* Invalid argument */
 #define ENFILE          23      /* File table overflow */
 #define EMFILE          24      /* Too many open files */
+#define ENOTTY          25      /* Not a typewriter */
+#define ETXTBSY         26      /* Text file busy */
+#define EFBIG           27      /* File too large */
 #define ENOSPC          28      /* No space left on device */
-#define ENAMETOOLONG    36      /* File name too long */
+#define ESPIPE          29      /* Illegal seek */
+#define EROFS           30      /* Read-only file system */
+#define EMLINK          31      /* Too many links */
+#define EPIPE           32      /* Broken pipe */
+#define EDOM            33      /* Math argument out of domain of func */
+#define ERANGE          34      /* Math result not representable */
 #define ENOSYS          38      /* Function not implemented */
 
+#define ERR_MAX 38
 
+#define ERR_UKN "Unknown error message"
 
+char *_error_msg[] = {
+  "No error",                           // 0
+  "Operation not permitted",
+  "No such file or directory",
+  "No such process",
+  "Interrupted system call",
+  "I/O error",                          // 5
+  "No such device or address",
+  "Argument list too long",
+  "Exec format error",
+  "Bad file number",
+  "No child processes",                 // 10
+  "Try again",
+  "Out of memory",
+  "Permission denied",
+  "Bad address",
+  "Block device required",              // 15
+  "Device or resource busy",
+  "File exists",
+  "Cross-device link",
+  "No such device",
+  "Not a directory",                    // 20
+  "Is a directory",
+  "Invalid argument",
+  "File table overflow",
+  "Too many open files",
+  "Not a typewriter",                   // 25
+  "Text file busy",
+  "File too large",
+  "No space left on device",
+  "Illegal seek",
+  "Read-only file system",              // 30
+  "Too many links",
+  "Broken pipe",
+  "Math argument out of domain of func",
+  "Math result not representable"       // 34
+  ERR_UKN,                              // 35
+  ERR_UKN,
+  ERR_UKN,
+  "Function not implemented"
+};
 
 
 
