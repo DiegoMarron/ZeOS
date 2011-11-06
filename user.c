@@ -10,25 +10,8 @@ int __attribute__ ((__section__(".text.main")))
     /* Uncomment next line to call the initial routine for the test cases */
     /* runjp(); */
 
-  int pid;
 
   printf("\n Zeos Sink Version D1.2\n");	
-
-  /* 
-  pid=fork();
-  if (pid==0) {
-    printf("pid=0\n\n-----------------");
-  }else{
-    printf("pid NOOO 0 ***********************\n");
-  }
-  */
-
-  /*
-  pid=fork();
-  if (pid==0) printf("pid=0\n");
-  else printf("pid NOOO 0 \n");
-  */
-
 
   runjp();
 

@@ -172,28 +172,12 @@ void init_task0(void)
 
   INIT_LIST_HEAD(&(ts_idle->t_queue));
 
-  /*
-  // Mark code used ph_pages 
-  for (i = NUM_PAG_KERNEL; i < (NUM_PAG_CODE+NUM_PAG_DATA); i++){
-    phys_mem[i] = USED_FRAME;
-    }*/
-
   // Initializes paging for the process 0 adress space 
   //set_user_pages(&task[0].t.task);
   set_user_pages(ts_idle);
   set_cr3();
 
   rq->running = ts_idle;
-
-  printk("task0 addr = ");
-  printd((int)ts_idle);
-
-  printk("| rq running queue = ");
-  printd((int)&(this_rq()->actives.queue));
-
-  printk("| rq  = ");
-  printd((int)(this_rq()));
-
 
   rq_add_to_active(ts_idle,this_rq());
 }
@@ -251,14 +235,6 @@ void task_switch(int eoi){
 
   if (_rq->next==0) return;
 
-  /*
-#ifdef __ZEOS_DEBUG_
-  printk("task_switch from pid = ");
-  printd(current->t_pid);
-  printk(" to new pid = ");
-  printd(_rq->next->t_pid);
-#endif  
-  */
   _rq->context_switchs++;
   current->t_cs++;
   tu=TS2TU(_rq->next);
