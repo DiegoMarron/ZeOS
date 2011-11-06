@@ -71,6 +71,14 @@ void printk(char *string)
     printc(string[i]);
 }
 
+void printd(int num){
+  char str[12];
+  __itoa(num,&str[0],10,0);
+  printk(&str[0]);
+
+}
+
+
 // A new wrapper around printc function,
 // we can change the offset on video memory where to write
 // positioning anywhere

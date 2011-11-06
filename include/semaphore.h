@@ -13,6 +13,7 @@ struct task_struct;
 
 struct semaphore{
   struct task_struct *owner;
+  int init;
   int count;
   int sleepers;
   struct list_head wait;
@@ -28,7 +29,8 @@ extern sem_t __semaphores[SEM_MAX];
 void init_sem();
 
 static inline void task_move_to_sem(task_t* _task,int n_sem){
-  list_del(&_task->t_queue);
+  //list_del(&_task->t_queue);
+  task_dactivate_task(_task); 
   list_add_tail(&_task->t_queue, &__semaphores[n_sem].wait);
   __semaphores[n_sem].sleepers++;
 }

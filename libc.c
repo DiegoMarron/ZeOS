@@ -64,8 +64,8 @@ int get_stats(int pid, struct stats *st){
 void perror() {
 
   if ((errno < 0) || (errno > ERR_MAX)){
-    printf("Error: errno out of range.. BUG ?\n");
+    printf("Error: errno =  out of range.. BUG ?\n");
+  }else{
+    printf(_error_msg[errno]);
   }
-  printf(_error_msg[errno]);
-
 }

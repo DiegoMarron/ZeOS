@@ -25,5 +25,6 @@ void outb(Byte __val, unsigned short __port);
 void printc(char c);
 void printk(char *string);
 void printk_xy(int _x, int _y, char *string);
+void printd(int num);
 
 #endif  /* __IO_H__ */

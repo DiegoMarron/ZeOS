@@ -255,7 +255,10 @@ int alloc_frame( void )
 void free_frame( unsigned int frame )
 {
   //  if ((frame > NUM_PAG_KERNEL) && (frame < TOTAL_PAGES))
-				phys_mem[frame] = FREE_FRAME;
+  //phys_mem[frame] = FREE_FRAME;
+  phys_mem[frame] = 0;
+
+
 }
 
 

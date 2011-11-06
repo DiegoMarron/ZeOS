@@ -31,6 +31,7 @@ void init_sem(){
     __semaphores[i].owner =0;
     __semaphores[i].count=0;
     __semaphores[i].sleepers=0;
+    __semaphores[i].init=-1;
     INIT_LIST_HEAD(&__semaphores[i].wait);
   }
 }
@@ -184,6 +185,16 @@ void init_task0(void)
 
   rq->running = ts_idle;
 
+  printk("task0 addr = ");
+  printd((int)ts_idle);
+
+  printk("| rq running queue = ");
+  printd((int)&(this_rq()->actives.queue));
+
+  printk("| rq  = ");
+  printd((int)(this_rq()));
+
+
   rq_add_to_active(ts_idle,this_rq());
 }
 
@@ -240,7 +251,14 @@ void task_switch(int eoi){
 
   if (_rq->next==0) return;
 
-
+  /*
+#ifdef __ZEOS_DEBUG_
+  printk("task_switch from pid = ");
+  printd(current->t_pid);
+  printk(" to new pid = ");
+  printd(_rq->next->t_pid);
+#endif  
+  */
   _rq->context_switchs++;
   current->t_cs++;
   tu=TS2TU(_rq->next);
@@ -290,13 +308,12 @@ void task_switch(int eoi){
 void task_prepare_to_switch(rq_t *_rq){
  
   current->t_dprio = current->t_prio;
-
+  
   if (_rq->actives.count > 1){
     list_del(&current->t_queue);
     list_add_tail(&current->t_queue,&_rq->actives.queue);
     _rq->next=list_head_to_task_struct(list_first(&_rq->actives.queue));
   }
-
 }
 
 

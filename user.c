@@ -14,11 +14,14 @@ int __attribute__ ((__section__(".text.main")))
 
   printf("\n Zeos Sink Version D1.2\n");	
 
-  
+  /* 
   pid=fork();
-  if (pid==0) printf("pid=0\n");
-  else printf("pid NOOO 0 \n");
- 
+  if (pid==0) {
+    printf("pid=0\n\n-----------------");
+  }else{
+    printf("pid NOOO 0 ***********************\n");
+  }
+  */
 
   /*
   pid=fork();
@@ -26,7 +29,8 @@ int __attribute__ ((__section__(".text.main")))
   else printf("pid NOOO 0 \n");
   */
 
-  //runjp();
+
+  runjp();
 
   while(1);
 }

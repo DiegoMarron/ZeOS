@@ -130,7 +130,7 @@ void clock_routine(){
   // just increment tic, if it reaches the max 2^64
   // when incremented by 1, automatically it will reset to 0
   tics++;
-
+  current->t_tics++;
   
   if ((tics % freq) == 0){
     up_secs++;
@@ -149,7 +149,7 @@ void clock_routine(){
   _time_buff[0]=time_map[up_hours][0];
   _time_buff[1]=time_map[up_hours][1];
 
-  printk_xy(72,0,&_time_buff[0]);
+  //printk_xy(72,0,&_time_buff[0]);
   
  
   schedule();
